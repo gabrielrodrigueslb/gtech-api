@@ -1,3 +1,4 @@
+import { apiKeyMiddleware } from '../../middlewares/apiKey.middleware.js';
 import * as pipelineController from '../controllers/pipelineController.js';
 import { Router } from 'express';
 
@@ -9,9 +10,9 @@ router.options('/createPipeline', (req, res) => {
 });
 
 router.post('/createPipeline', pipelineController.createPipelineController);
-router.get('/getPipelines', pipelineController.getPipelinesController);
+router.get('/getPipelines',apiKeyMiddleware, pipelineController.getPipelinesController);
 router.delete(
-  '/deletePipeline/:id',
+  '/deletePipeline/:id', apiKeyMiddleware,
   pipelineController.deletePipelineController,
 );
 router.put('/updatePipeline/:id', pipelineController.updatePipelineController);
