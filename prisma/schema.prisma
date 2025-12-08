@@ -33,7 +33,7 @@ enum Role {
 //
 model Contact {
   id              String          @id @default(uuid())
-  name            String?
+  name            String
   phone           String?
   email           String?
   segment         String?
