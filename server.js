@@ -5,6 +5,7 @@ import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import userRoutes from './src/routes/userRoutes.js';
 import authRoutes from './src/routes/authRoutes.js';
+import opportunityRoutes from './src/routes/opportunityRoutes.js';
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(
 app.use('/api/crm', pipelineRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/opportunities', opportunityRoutes);
 
 app.listen(3333, () => {
   console.log('🔥 API rodando em http://localhost:3333');
