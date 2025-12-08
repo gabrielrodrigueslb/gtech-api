@@ -15,6 +15,11 @@ router.post(
   userController.createUserController,
 );
 router.get('/getUsers', apiKeyMiddleware, userController.getUsersController);
+router.get(
+  '/getUserById/:id',
+  apiKeyMiddleware,
+  userController.getUserByIdController,
+);
 router.delete(
   '/deleteUser/:id',
   apiKeyMiddleware,

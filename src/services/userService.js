@@ -38,6 +38,21 @@ export function getUsers() {
   });
 }
 
+export async function getUserById(id) {
+  if (!id) throw new Error('ID do usuário é obrigatório');
+  const user =  await prisma.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      createdAt: true,
+    },
+  });
+  if (!user) throw new Error('Usuário não encontrado');
+  return user;
+}
+
 export async function deleteUser(id) {
   if (!id) {
     throw new Error('ID do usuário é obrigatório');
