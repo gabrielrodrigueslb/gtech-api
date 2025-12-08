@@ -7,8 +7,8 @@ import {
 
 export async function createPipelineController(req, res) {
   try {
-    const { name } = req.body;
-    const pipeline = await createPipeline(name);
+    const { name, stages } = req.body;
+    const pipeline = await createPipeline(name, stages);
     res.status(201).json(pipeline);
   } catch (error) {
     res.status(400).json({ error: error.message });
