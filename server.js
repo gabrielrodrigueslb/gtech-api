@@ -36,11 +36,11 @@ app.use(
   }),
 );
 
-app.use('/crm', pipelineRoutes);
-app.use('/user', userRoutes);
-app.use('/auth', authRoutes);
-app.use('/opportunities', opportunityRoutes);
-app.use('/contacts', contactRoutes);
+app.use('/api/crm', pipelineRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/opportunities', opportunityRoutes);
+app.use('/api/contacts', contactRoutes);
 
 app.listen(3333, () => {
   console.log('🔥 API rodando em http://localhost:3333');
