@@ -10,20 +10,37 @@ import contactRoutes from './src/routes/contactRoutes.js';
 
 const app = express();
 
+app.set('trust proxy', 1);
+
+
+const allowedOrigins = [
+  'http://localhost:3000',
+  process.env.FRONTEND_URL
+];
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: function(origin, callback){
+      if(!origin) return callback(null, true);
+      if(allowedOrigins.indexOf(origin) === -1){
+        const msg = 'A política CORS para este site não permite acesso da origem ' + origin;
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    } ,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
   }),
 );
 
-app.use('/api/crm', pipelineRoutes);
-app.use('/api/user', userRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/opportunities', opportunityRoutes);
-app.use('/api/contacts', contactRoutes);
+app.use('/crm', pipelineRoutes);
+app.use('/user', userRoutes);
+app.use('/auth', authRoutes);
+app.use('/opportunities', opportunityRoutes);
+app.use('/contacts', contactRoutes);
 
 app.listen(3333, () => {
   console.log('🔥 API rodando em http://localhost:3333');
