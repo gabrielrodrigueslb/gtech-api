@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import 'dotenv/config';
 import express from 'express';
 import pipelineRoutes from './src/routes/pipelineRoutes.js';
 import cors from 'cors';
@@ -12,25 +12,26 @@ const app = express();
 
 app.set('trust proxy', 1);
 
-
 const allowedOrigins = [
   'http://localhost:3000',
   'https://lintratech.cloud',
-  process.env.NEXT_FRONTEND_URL
+  process.env.NEXT_FRONTEND_URL,
 ];
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: function(origin, callback){
-      if(!origin) return callback(null, true);
-      if(allowedOrigins.indexOf(origin) === -1){
-        const msg = 'A política CORS para este site não permite acesso da origem ' + origin;
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          'A política CORS para este site não permite acesso da origem ' +
+          origin;
         return callback(new Error(msg), false);
       }
       return callback(null, true);
-    } ,
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'x-api-key'],
