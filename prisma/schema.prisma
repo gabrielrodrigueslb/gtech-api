@@ -76,7 +76,7 @@ model Opportunity {
   id                String        @id @default(cuid())
   title             String
   description       String?
-  contactNumber     Int?
+  contactNumber     String?
   website           String?
   address           String?
   amount            Float?
