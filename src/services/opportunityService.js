@@ -15,6 +15,9 @@ export async function createOpportunity(data) {
     probability: parseInt(data.probability || 0), // Garante int
     dueDate: data.dueDate ? new Date(data.dueDate) : null,
     status: 'OPEN',
+    contactNumber: data.contactNumber,
+    website:data.website,
+    address:data.address,
     
     // Relacionamentos Obrigatórios
     pipeline: { connect: { id: data.pipelineId } },

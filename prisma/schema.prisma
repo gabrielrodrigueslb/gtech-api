@@ -76,6 +76,9 @@ model Opportunity {
   id                String        @id @default(cuid())
   title             String
   description       String?
+  contactNumber     Int?
+  website           String?
+  address           String?
   amount            Float?
   recurringAmount   Float?
   probability       Int?
