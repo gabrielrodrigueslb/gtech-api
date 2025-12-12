@@ -15,9 +15,9 @@ export async function createOpportunity(data) {
     probability: parseInt(data.probability || 0), // Garante int
     dueDate: data.dueDate ? new Date(data.dueDate) : null,
     status: 'OPEN',
-    contactNumber: data.contactNumber,
-    website: data.website,
-    address: data.address,
+    contactNumber: data.contactNumber || null,
+    website: data.website || null,
+    address: data.address || null,
 
     // Relacionamentos Obrigatórios
     pipeline: { connect: { id: data.pipelineId } },
@@ -77,6 +77,7 @@ export async function updateOpportunity(id, data) {
   if (data.stageId) {
     updateData.stage = { connect: { id: data.stageId } };
   }
+
   delete updateData.stageId; // <--- OBRIGATÓRIO: Remove do objeto final
 
   // 2. Tratamento de Contato
@@ -101,6 +102,10 @@ export async function updateOpportunity(id, data) {
   if (updateData.probability !== undefined) {
     updateData.probability = parseInt(updateData.probability);
   }
+  if (updateData.contactNumber !== undefined)
+    updateData.contactNumber = data.contactNumber;
+  if (updateData.website !== undefined) updateData.website = data.website;
+  if (updateData.address !== undefined) updateData.address = data.address;
 
   if (updateData.dueDate) {
     updateData.dueDate = new Date(updateData.dueDate);
