@@ -17,10 +17,10 @@ export async function getAllProjectsController(req, res) {
     const projects = await getAllProjects();
     return res.status(200).json(projects);
   } catch (error) {
+    console.error('Erro no getAllProjectsController:', error); // Isso vai mostrar o erro no terminal do backend
     return res.status(500).json({ error: 'Erro ao buscar projetos.' });
   }
 }
-
 export async function getProjectByIdController(req, res) {
   try {
     const { id } = req.params;
