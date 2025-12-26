@@ -11,15 +11,18 @@ function mapProject(project) {
     challenge: project.challenge,
     solution: project.solution,
     banner: project.banner,
-    images: project.images,
-    tags: project.tags,
-    technologies: project.technologies,
+    images: project.images || [], // Garante array vazio se for null/undefined
+    tags: project.tags || [],
+    technologies: project.technologies || [],
     year: project.year,
     role: project.role,
-    category: {
+    
+    // CORREÇÃO AQUI: Verifica se a categoria existe antes de acessar os dados
+    category: project.category ? {
       id: project.category.id,
       name: project.category.name,
-    },
+    } : { id: 0, name: 'Sem Categoria' }, // Valor padrão caso não tenha categoria
+    
     createdAt: project.createdAt,
   };
 }
@@ -96,8 +99,10 @@ export async function updateProject(id, data) {
     updateData.categoryId = Number(data.categoryId);
   }
 
+  // Remove campos que não devem ser alterados diretamente ou que não existem no schema de update
   delete updateData.id;
   delete updateData.createdAt;
+  delete updateData.category; // Não tentamos atualizar o objeto de relação, apenas o ID acima
 
   const project = await prisma.projetos.update({
     where: { id: Number(id) },
