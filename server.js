@@ -18,6 +18,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'https://lintratech.cloud',
   'http://localhost:2006',
+  'https://panel.lintratech.cloud',
   process.env.NEXT_FRONTEND_URL,
 ];
 
