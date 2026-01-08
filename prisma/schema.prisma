@@ -8,136 +8,92 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
-
-  role   Role    @default(USER)
-  active Boolean @default(true)
-
-  opportunities Opportunity[]
+  id            String        @id @default(uuid())
+  name          String
+  email         String        @unique
+  password      String
+  role          Role          @default(USER)
+  active        Boolean       @default(true)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
   notes         Note[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  opportunities Opportunity[]
 }
 
-enum Role {
-  ADMIN
-  USER
-}
-
-//
-// CONTACT
-//
 model Contact {
-  id      String  @id @default(uuid())
-  name    String
-  phone   String?
-  email   String?
-  segment String?
-
+  id            String        @id @default(uuid())
+  name          String
+  phone         String?
+  email         String?
+  segment       String?
+  createdAt     DateTime      @default(now())
   opportunities Opportunity[] @relation("ContactOpportunity")
-
-  createdAt DateTime @default(now())
 }
 
-//
-// PIPELINE (FUNIL)
-//
 model Pipeline {
-  id   String @id @default(uuid())
-  name String
-
+  id            String        @id @default(uuid())
+  name          String
+  opportunities Opportunity[]
   stages        Stage[]
-  opportunities Opportunity[]
 }
 
-//
-// STAGE (ETAPA)
-//
 model Stage {
-  id    String @id @default(uuid())
-  name  String
-  order Int
-  color String
-
-  pipeline   Pipeline @relation(fields: [pipelineId], references: [id])
-  pipelineId String
-
+  id            String        @id @default(uuid())
+  name          String
+  order         Int
+  pipelineId    String
+  color         String
   opportunities Opportunity[]
+  pipeline      Pipeline      @relation(fields: [pipelineId], references: [id])
 }
 
-//
-// OPPORTUNITY (OPORTUNIDADE)
-//
 model Opportunity {
   id              String            @id @default(cuid())
   title           String
   description     String?
-  contactNumber   String?
-  website         String?
-  address         String?
   amount          Float?
   recurringAmount Float?
   probability     Int?
   dueDate         DateTime?
   status          OpportunityStatus @default(OPEN)
-  wonLostReason   String? // optional manual reason
-
-  // Relations
-  contacts Contact[] @relation("ContactOpportunity")
-
-  owner   User   @relation(fields: [ownerId], references: [id])
-  ownerId String
-
-  pipeline   Pipeline @relation(fields: [pipelineId], references: [id])
-  pipelineId String
-
-  stage   Stage?  @relation(fields: [stageId], references: [id])
-  stageId String?
-
-  notes Note[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  wonLostReason   String?
+  ownerId         String
+  pipelineId      String
+  stageId         String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  address         String?
+  contactNumber   String?
+  website         String?
+  notes           Note[]
+  owner           User              @relation(fields: [ownerId], references: [id])
+  pipeline        Pipeline          @relation(fields: [pipelineId], references: [id])
+  stage           Stage?            @relation(fields: [stageId], references: [id])
+  contacts        Contact[]         @relation("ContactOpportunity")
 }
 
-enum OpportunityStatus {
-  OPEN
-  WON
-  LOST
-}
-
-//
-// NOTE
-//
 model Note {
-  id        String   @id @default(cuid())
-  message   String
-  createdAt DateTime @default(now())
-
-  user   User   @relation(fields: [userId], references: [id])
-  userId String
-
-  opportunity   Opportunity @relation(fields: [opportunityId], references: [id])
+  id            String      @id @default(cuid())
+  message       String
+  createdAt     DateTime    @default(now())
+  userId        String
   opportunityId String
+  opportunity   Opportunity @relation(fields: [opportunityId], references: [id])
+  user          User        @relation(fields: [userId], references: [id])
 }
 
 model Categorias {
-  id        Int         @id @default(autoincrement())
+  id        Int        @id @default(autoincrement())
   name      String
   projetos  Projetos[]
-  postagens Postagens[]
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
+  Posts     Post[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model Projetos {
   id           Int        @id @default(autoincrement())
   title        String
-  category     Categorias @relation(fields: [categoryId], references: [id])
   categoryId   Int
   tags         String[]
   banner       String
@@ -150,16 +106,54 @@ model Projetos {
   role         String
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
+  category     Categorias @relation(fields: [categoryId], references: [id])
 }
 
-model Postagens {
-  id         Int        @id @default(autoincrement())
-  title      String
-  date       DateTime
-  author     String
+model Post {
+  id Int @id @unique @default(autoincrement())
+
+  slug    String  @unique
+  title   String
+  excerpt String?
+
+  content     String
+  contentType ContentType @default(MARKDOWN)
+
+  status      PostStatus @default(DRAFT)
+  publishedAt DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  author String
+
   categoryId Int
   category   Categorias @relation(fields: [categoryId], references: [id])
-  banner     String
-  readTime   Int
-  content    String
+
+  featuredImage String
+  readTime      String
+
+  @@index([slug])
+  @@index([status, publishedAt])
+}
+
+enum PostStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum ContentType {
+  MARKDOWN
+  HTML
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum OpportunityStatus {
+  OPEN
+  WON
+  LOST
 }

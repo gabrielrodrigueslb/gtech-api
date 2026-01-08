@@ -9,6 +9,7 @@ import opportunityRoutes from './src/routes/opportunityRoutes.js';
 import contactRoutes from './src/routes/contactRoutes.js';
 import projetosRoutes from './src/routes/projetosRoutes.js'
 import categoriasRoutes from './src/routes/categoriasRoutes.js';
+import postRoutes from './src/routes/postRoutes.js';
 
 const app = express();
 
@@ -19,6 +20,7 @@ const allowedOrigins = [
   'https://lintratech.cloud',
   'http://localhost:2006',
   'https://panel.lintratech.cloud',
+  'https://lintratech.app.n8n.cloud',
   process.env.NEXT_FRONTEND_URL,
 ];
 
@@ -49,6 +51,7 @@ app.use('/api/opportunities', opportunityRoutes);
 app.use('/api/contacts', contactRoutes);
 app.use('/api/projects', projetosRoutes);
 app.use('/api/categories', categoriasRoutes);
+app.use('/api/posts', postRoutes);
 
 app.listen(3333, () => {
   console.log('🔥 API rodando em http://localhost:3333');
